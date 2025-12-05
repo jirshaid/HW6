@@ -1,7 +1,6 @@
-
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Jenine Irshaid / 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -151,8 +150,15 @@ class PriorityQueue<E, P> {
 
     public Node add(E e, P priority) {
 
-        // YOUR CODE GOES HERE
-        return null;
+        // Create new node at end of heap array
+        Node node = new Node(e, priority, tree.size());
+        tree.add(node);
+
+        // Restore min-heap property by pulling it up
+        pullUp(node.idx);
+
+        // Return handle to node
+        return node;
     }
 
 
@@ -168,7 +174,14 @@ class PriorityQueue<E, P> {
 
     public boolean contains(E e) {
 
-        // ADD YOUR CODE HERE
+        // Linear scan of heap array
+        for (Node node : tree) {
+            if (e == null) {
+                if (node.value == null) return true;
+            } else if (e.equals(node.value)) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -236,14 +249,6 @@ class PriorityQueue<E, P> {
 
     /**
      * Private Method pushDown(int)
-     *
-     * This method is called when dequeuing an element from the queue. The shape 
-     * of the min heap is expected to be correct, and this is being called to 
-     * re-heapify the heap by pushing the value of the element specific by the 
-     * array index location down the tree to the correct location. Recall, the
-     * heap structured is stored in an array. 
-     *
-     * @param: int i    - The node in the min heap to push down as appropriate.
      */
 
     private void pushDown(int i) {
@@ -264,14 +269,6 @@ class PriorityQueue<E, P> {
 
     /**
      * Private Method pullUp(int)
-     *
-     * This method is called when enqueuing an element on the queue. The shape of 
-     * the min heap is expected to be correct, and this is being called to re-heapify
-     * the heap by pulling up the value in the logical tree based on the element 
-     * value at the location specified by the array index location passed to 
-     * this method.
-     *
-     * @param: int i    - The node in the min heap to push down as appropriate.
      */
 
     private void pullUp(int i) {
@@ -301,14 +298,6 @@ class PriorityQueue<E, P> {
 
     /**
      * Public Method toArray()
-     *
-     * This method returns an ArrayList of type 'E', which is the nodes element 
-     * value. The returned array will be populated from array slots 0...n-1, 
-     * where there area n elements in the array. It will represent the flattened 
-     * out tree structure in the array implementation of the min heap.
-     *
-     * @return: ArrayList<E>    - an array consisting of the element values 
-     *                            in the queue
      */
 
     public ArrayList<E> toArray() {
@@ -322,9 +311,6 @@ class PriorityQueue<E, P> {
 
     /**
      * Public Method printPriorityQueue()
-     *
-     * This method is for debugging purposes, it will print out the min heap by
-     * iterating through the array. The tree structure is overlayed on the array.
      */
 
     public void printPriorityQueue() {
@@ -341,26 +327,6 @@ class PriorityQueue<E, P> {
 
     /**
      * Class Node
-     *
-     * This object represent a node of the min Heap; as a result, the array 
-     * implementation of the min heap is an array of type Node. The constructor of 
-     * Node is based on a generic interface and takes the object types of 'E' and 'P' 
-     * from the instantiation of the class PriorityQueue which encapsulates 
-     * this object.
-     *
-     * Object type 'E' is the object type of the value of each element in the min 
-     * heap. And the type 'P' is the data type of its priority.
-     *
-     * Several key method are provided on the Node object. The object is returned 
-     * to the application on methods of PriorityQueue which add it to the minHeap.
-     * That returned object represents a handle to that element which is currently 
-     * in the queue (min heap).
-     *
-     * With this handle, the application can utilize the methods:
-     *  - changePriority - Change a priority of a element on the priority queue
-     *  - remove         - remove the element from the queue.
-     *  - isvalid        - returns true if  handle to an element is still in the queue,
-     *                     or returns false if it was removed already.
      */
 
     public class Node {
@@ -382,19 +348,6 @@ class PriorityQueue<E, P> {
         public boolean isValid()    { return !removed; }
 
 
-        /*
-         * Method changePriority
-         *
-         * The class Node, which represents an element on the queue, is
-         * returned from select methods of class PriorityQueue<E,P>. This
-         * Node object represents not only the content associated to a
-         * returned element on the queue, but if the element is still on
-         * the queue (e.g., was returned by peek()), the invoking
-         * application can use the method changePriority() to change the
-         * element's priority while still on the queue. It will be adjusted
-         * appropriately in the heap.
-         */
-
         public void changePriority(P newPriority) {
             checkNodeValidity();
             if (compare(newPriority, priority) < 0) {
@@ -411,19 +364,6 @@ class PriorityQueue<E, P> {
                 throw new IllegalStateException("node is no longer part of heap");
             }
         }
-
-        /*
-         * Method remove
-         *
-         * The class Node represents an element on the queue. Select methods of
-         * the class PriorityQueue<E,P> return this object representing an
-         * element on teh queue (e.g., poll()). The invoking application can
-         * use data type as a handle to the element on the queue, even if the queue
-         * changes and it is no longer at the top of the heap. By using this method,
-         * remove, on the handle of type Node, the application can remove the
-         * element from the queue even though the queue changed and it may now be
-         * somewhere in the middle of the queue.
-         */
 
         public void remove() {
             checkNodeValidity();
